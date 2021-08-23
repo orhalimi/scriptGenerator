@@ -8,7 +8,7 @@ class Splitter{
     }
 
     splitTasks() {
-        const individualTasks = {...this._config.tasks}
+        const individualTasks = {...this._config.tasks};
         for (let task in this._config.dependencies) {
             const dependencies = this._config.dependencies[task]
             if (dependencies.length < 1) throw new Error("expect one or more dependencies on task " + task + " got none.")
