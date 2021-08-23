@@ -14,7 +14,7 @@ function createExeFiles(config, input =[]) {
         splitter.splitTasks();
         splitter.insertExperimentData({experimentTask, experimentParam, experimentValues})
 
-        let file = ''
+        let files = []
         let codeChunk ='';
 
         for(let task of splitter.individualTasks){
@@ -26,17 +26,17 @@ function createExeFiles(config, input =[]) {
             codeChunk += splitter.taskGraphs[graphId].graphToExeCommands(config)
         }
 
+        console.log(createFilePerValue(codeChunk, input));
+}
 
-        console.log(codeChunk);
-
-        // for(let task)
-
-        // for (let gId in splitter.taskGraphs){
-        //     console.log(splitter.taskGraphs[gId]._experimentMembers)
-        //     break;
-        // }
-
+function createFilePerValue(text, values){
+    const files =[]
+    for( let v of values){
+        console.log(typeof text)
+        files.push(text.replace(/\$input/g, v))
+    }
+    return files;
 }
 
 
-createExeFiles(json, ['x'])
+createExeFiles(json, ['x','y'])
