@@ -3,12 +3,12 @@ import TasksDepandedGraph from './TasksDepandedGraph'
 class Splitter{
     constructor(config){
         this._config = config;
-        this.individualTasks = {}
+        this.individualTasks = []
         this.taskGraphs = {}
     }
 
     splitTasks() {
-        this.individualTasks = {...this._config.tasks}
+        const individualTasks = {...this._config.tasks}
         for (let task in this._config.dependencies) {
             const dependencies = this._config.dependencies[task]
             if (dependencies.length < 1) throw new Error("expect one or more dependencies on task " + task + " got none.")
@@ -16,15 +16,16 @@ class Splitter{
             for (let dep of dependencies) {
                 if (!this._config.tasks[dep]) throw new Error('All the dependencies should be defined as a tasks' + dep)
                 this._addToDependenciesGraph(dep, task)
-                delete this.individualTasks[dep];
-                delete this.individualTasks[task];
+                delete individualTasks[dep];
+                delete individualTasks[task];
             }
         }
         this._validateNoCycleGraphs();
+        this.individualTasks = Object.keys(individualTasks);
     }
 
     insertExperimentData({experimentTask, experimentParam, experimentValues}){
-        if(this.individualTasks[experimentTask]) return // nothing needs to be done
+        if(this.individualTasks.includes(experimentTask)) return // nothing needs to be done
         const {graph} = this.getGraphByTask(experimentTask);
         graph.setExperimentData({experimentTask, experimentParam, experimentValues})
     }
@@ -38,16 +39,8 @@ class Splitter{
     }
 
     _addToDependenciesGraph(dependencie, task) {
-        // console.log('dep')
-        // console.log(dependencie)
-        // console.log('task')
-        // console.log(task)
         const { graph: graphA, graphId: graphAId } = this.getGraphByTask(dependencie);
         const { graph: graphB, graphId: graphBId } = this.getGraphByTask(task);
-        // console.log('graphidA')
-        // console.log(graphAId)
-        // console.log('graphidB')
-        // console.log(graphBId)
         let relevantGraph;
         if (!graphA && !graphB) {
             relevantGraph = this._createNewTaskDepGraph(dependencie, task)
@@ -76,10 +69,6 @@ class Splitter{
         const graphB = this.taskGraphs[graphBId];
         const serializedA = graphA.serialize()
         const serializedB = graphB.serialize()
-        // console.log("serA")
-        // console.log(serializedA)
-        // console.log("serB")
-        // console.log(serializedB)
         const mergedSerialized = {
             nodes:[
                 ...serializedA.nodes,
@@ -90,15 +79,12 @@ class Splitter{
                 ...serializedB.links
             ]
         }
-        // console.log("merge")
-        // console.log(mergedSerialized)
 
         const mergeGraph =  new TasksDepandedGraph(mergedSerialized)
         delete this.taskGraphs[graphAId]
         delete this.taskGraphs[graphBId]
         this.taskGraphs[graphAId] = mergeGraph; 
-        // console.log('task graph after merge')
-        // console.log( this.taskGraphs);
+
         return mergeGraph;
     }
     

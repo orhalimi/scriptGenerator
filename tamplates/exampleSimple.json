@@ -6,26 +6,21 @@
         "D": "echo \"$input D\"",
         "E": "echo \"$input E\"",
         "F": "echo \"$input F\"",
-        "G": "echo \"$input G\"",
         "H": "echo \"$input H\"",
-        "I": "echo \"$input I\"",
-        "J": "echo \"$input J\"",
-        "K": "echo \"$input K\""
+        "G": "echo \"$input G\""
+
     },
     "dependencies":{
         "B": ["A"],
         "C": ["B"],
-        "D": ["B"],
-        "E": ["D"],
-        "F": ["J"]
+        "E": ["F"],
+        "H": ["G"],
+        "F": ["G"]
     },
 
     "experiment":{
         "B": {"$hero":["-spiderman","-jedi","-megaman"]}
     },
     
-    "minLinesToSpilt":2,
-
-    "dependencies_docs": "dependencies: B <- A.",
-    "minLinesToSpilt_docs":  "minLinesToSpilt: try to split running if the line chunk is passed the defined number. 0 or less numbers will be ignored."
+    "dependencies_docs": "dependencies: B <- A."
 }

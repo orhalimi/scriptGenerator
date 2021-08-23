@@ -24,10 +24,5 @@
         "A": {"$hero":["-spiderman","-jedi","-megaman"]}
     },
     
-    "minLinesToSpilt":2,
-
-    "dependencies_docs": "dependencies: A <- B.",
-    "minLinesToSpilt_docs":  "minLinesToSpilt: try to split running if the line chunk is passed the defined number. 0 or less numbers will be ignored."
-
-
+    "dependencies_docs": "dependencies: A <- B."
 }
