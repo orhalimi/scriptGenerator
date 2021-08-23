@@ -1,42 +1,26 @@
-const json = require('./tamplates/exampleSimple.json');
-import Splitter from './splitter';
-import helpers from './helpers';
+import fileCreator from './src/filleCreator';
+import redisClient from './src/redisClient';
+const json = require('./tamplates/example.json');
 
-function createExeFiles(config, input =[]) {
-    // try {
-        const {        
-            experimentTask,
-            experimentParam,
-            experimentValues,
-        } = helpers.getExperiment(config)
-
-        const splitter = new Splitter(config)
-        splitter.splitTasks();
-        splitter.insertExperimentData({experimentTask, experimentParam, experimentValues})
-
-        let files = []
-        let codeChunk ='';
-
-        for(let task of splitter.individualTasks){
-            if(task === experimentTask) codeChunk += helpers.taskToExeCommands({task, config, experimentParam, experimentValues})
-            else codeChunk += helpers.taskToExeCommands({task, config})
-        }
-
-        for(let graphId in splitter.taskGraphs ){
-            codeChunk += splitter.taskGraphs[graphId].graphToExeCommands(config)
-        }
-
-        console.log(createFilePerValue(codeChunk, input));
-}
-
-function createFilePerValue(text, values){
-    const files =[]
-    for( let v of values){
-        console.log(typeof text)
-        files.push(text.replace(/\$input/g, v))
+async function main(filename){
+    await initilaized();
+    const templateRaw = await redisClient.getAsync(`template:${filename}`);
+    const template = JSON.parse(templateRaw);
+    const values = await redisClient.lrangeAsync(`input:${filename}`,0, -1);
+    const files = fileCreator.createExeFiles(template, values)
+    await redisClient.rpushAsync(`output:${filename}`, files)
+    for(let file of files){
+        console.log(file, null, 2)
     }
-    return files;
 }
 
+async function initilaized(){
+    await redisClient.flushallAsync() // for demo purpuse
+    await redisClient.setAsync('template:example', JSON.stringify(json))
+    await redisClient.rpushAsync('input:example', ['x','y'])
+}
 
-createExeFiles(json, ['x','y'])
+main('example');
+
+// console.log(fileCreator.createExeFiles(json, ['x','y']))
+

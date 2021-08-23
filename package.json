@@ -6,15 +6,18 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node -r esm main.js",
+    "watch": "nodemon -r esm main.js",
     "conf-start": "cp prod.env .env && node -r esm -r dotenv/config server.js"
-
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bluebird": "^3.7.2",
     "dotenv": "^10.0.0",
     "esm": "^3.2.25",
-    "graph-data-structure": "^2.0.0"
+    "graph-data-structure": "^2.0.0",
+    "nodemon": "^2.0.12",
+    "redis": "^3.1.2"
   }
 }
