@@ -1,16 +1,16 @@
 {
     "tasks":{
-        "A": "echo \"$input A\"",
-        "B": "echo \"$input B\"",
-        "C": "echo \"$input C\"",
-        "D": "echo \"$input D\"",
-        "E": "echo \"$input E\"",
-        "F": "echo \"$input F\"",
-        "G": "echo \"$input G\"",
-        "H": "echo \"$input H\"",
-        "I": "echo \"$input I\"",
-        "J": "echo \"$input J\"",
-        "K": "echo \"$input K\""
+        "A": "./A.py -G $hero $input",
+        "B": "./B.py $input",
+        "C": "./C.py $input",
+        "D": "./D.py $input",
+        "E": "./E.py $input",
+        "F": "./F.py $input",
+        "G": "./G.py $input",
+        "H": "./H.py $input",
+        "I": "./I.py $input",
+        "J": "./J.py $input",
+        "K": "./K.py $input"
     },
     "dependencies":{
         "A": ["B"],
@@ -18,6 +18,10 @@
         "E": ["F"],
         "H":["G"],
         "G":["A"]
+    },
+
+    "experiment":{
+        "A": {"$hero":["-spiderman","-jedi","-megaman"]}
     },
     
     "minLinesToSpilt":2,

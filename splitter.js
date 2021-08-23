@@ -23,6 +23,12 @@ class Splitter{
         this._validateNoCycleGraphs();
     }
 
+    insertExperimentData({experimentTask, experimentParam, experimentValues}){
+        if(this.individualTasks[experimentTask]) return // nothing needs to be done
+        const {graph} = this.getGraphByTask(experimentTask);
+        graph.setExperimentData({experimentTask, experimentParam, experimentValues})
+    }
+
     getGraphByTask(task) {
         for (let graphId in this.taskGraphs) {
             const graph =  this.taskGraphs[graphId]
@@ -32,16 +38,16 @@ class Splitter{
     }
 
     _addToDependenciesGraph(dependencie, task) {
-        console.log('dep')
-        console.log(dependencie)
-        console.log('task')
-        console.log(task)
+        // console.log('dep')
+        // console.log(dependencie)
+        // console.log('task')
+        // console.log(task)
         const { graph: graphA, graphId: graphAId } = this.getGraphByTask(dependencie);
         const { graph: graphB, graphId: graphBId } = this.getGraphByTask(task);
-        console.log('graphidA')
-        console.log(graphAId)
-        console.log('graphidB')
-        console.log(graphBId)
+        // console.log('graphidA')
+        // console.log(graphAId)
+        // console.log('graphidB')
+        // console.log(graphBId)
         let relevantGraph;
         if (!graphA && !graphB) {
             relevantGraph = this._createNewTaskDepGraph(dependencie, task)
@@ -70,10 +76,10 @@ class Splitter{
         const graphB = this.taskGraphs[graphBId];
         const serializedA = graphA.serialize()
         const serializedB = graphB.serialize()
-        console.log("serA")
-        console.log(serializedA)
-        console.log("serB")
-        console.log(serializedB)
+        // console.log("serA")
+        // console.log(serializedA)
+        // console.log("serB")
+        // console.log(serializedB)
         const mergedSerialized = {
             nodes:[
                 ...serializedA.nodes,
@@ -84,15 +90,15 @@ class Splitter{
                 ...serializedB.links
             ]
         }
-        console.log("merge")
-        console.log(mergedSerialized)
+        // console.log("merge")
+        // console.log(mergedSerialized)
 
         const mergeGraph =  new TasksDepandedGraph(mergedSerialized)
         delete this.taskGraphs[graphAId]
         delete this.taskGraphs[graphBId]
         this.taskGraphs[graphAId] = mergeGraph; 
-        console.log('task graph after merge')
-        console.log( this.taskGraphs);
+        // console.log('task graph after merge')
+        // console.log( this.taskGraphs);
         return mergeGraph;
     }
     
