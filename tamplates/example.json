@@ -1,0 +1,29 @@
+{
+    "tasks":{
+        "A": "echo \"$input A\"",
+        "B": "echo \"$input B\"",
+        "C": "echo \"$input C\"",
+        "D": "echo \"$input D\"",
+        "E": "echo \"$input E\"",
+        "F": "echo \"$input F\"",
+        "G": "echo \"$input G\"",
+        "H": "echo \"$input H\"",
+        "I": "echo \"$input I\"",
+        "J": "echo \"$input J\"",
+        "K": "echo \"$input K\""
+    },
+    "dependencies":{
+        "A": ["B"],
+        "D": ["A","C"],
+        "E": ["F"],
+        "H":["G"],
+        "G":["A"]
+    },
+    
+    "minLinesToSpilt":2,
+
+    "dependencies_docs": "dependencies: A <- B.",
+    "minLinesToSpilt_docs":  "minLinesToSpilt: try to split running if the line chunk is passed the defined number. 0 or less numbers will be ignored."
+
+
+}
